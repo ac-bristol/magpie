@@ -23,6 +23,14 @@ module.exports = function(grunt) {
               sourcemap: true
             }
         },
+        build: {
+          options: {              
+            sassDir: '<%= meta.srcPath %>scss',
+            cssDir: '<%= meta.buildPath %>styles',
+            environment: 'production',
+            sourcemap: true
+          }
+        },
       },
 
      // uglify: {
@@ -60,6 +68,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['compass:dev']);
 
     // Build Task
-    grunt.registerTask('build', ['sass:build']);
+    grunt.registerTask('build', ['compass:build']);
 
 };
