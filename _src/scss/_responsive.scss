@@ -1,0 +1,180 @@
+// RESPONSIVE FONT SETTINGS ============================================
+
+// Assumed browser default
+$base-font-size: 16;
+
+// Default (i.e. mobile-first)
+$font-size:   15;
+$line-height: 19;
+
+// Phablet (yep, I hate me too)
+$font-size-phablet:   $font-size;// declare interger as needed
+$line-height-phablet: $line-height;// [same]
+
+// Tablet
+$font-size-tablet:   $font-size;// declare interger as needed
+$line-height-tablet: $line-height;// [same]
+
+// Desktop
+$font-size-desktop:   $font-size;// declare interger as needed
+$line-height-desktop: $line-height;// [same]
+
+// High Definition
+$font-size-hi-def:   $font-size;// declare interger as needed
+$line-height-hi-def: $line-height;// [same]
+
+@mixin type-settings {
+  font-size: em($font-size,$base-font-size);
+  line-height: em($line-height,$font-size);
+}
+
+@mixin type-settings-phablet {
+  font-size: em($font-size-phablet,$base-font-size);
+  line-height: em($line-height-phablet,$font-size-phablet);
+}
+
+@mixin type-settings-tablet {
+  font-size: em($font-size-tablet,$base-font-size);
+  line-height: em($line-height-tablet,$font-size-tablet);
+}
+
+@mixin type-settings-desktop {
+  font-size: em($font-size-desktop,$base-font-size);
+  line-height: em($line-height-desktop,$font-size-desktop);
+}
+
+@mixin type-settings-hi-def {
+  font-size: em($font-size-hi-def,$base-font-size);
+  font-size: em($line-height-hi-def,$font-size-hi-def);
+}
+
+
+// RESPONSIVE BREAKPOINTS ==============================================
+
+// If you've choosen to include Skeleton for layout, ensure your
+// breakpoints  match Skeleton's defaults (else roll your own
+// Skeleton-derived grid).
+// <http://www.getskeleton.com/#mediaQueries>
+$phablet: 480px;
+$tablet:  768px;
+$desktop: 1280px;
+$hi-def:  1600px;
+
+// Min/max breakpoint limiters concept by Brandon Mathis.
+// <http://codepen.io/imathis/pen/BDzcI>
+@mixin bp-min($device) {
+  @media (min-width: $device) {
+    @content;
+  }
+}
+@mixin bp-max($device) {
+  @media (max-width: $device - 1) {
+    @content;
+  }
+}
+
+// Simplified version of 'Breakpoint' concept as device-specific ranges.
+// <http://breakpoint-sass.com/>
+@mixin bp-only($device) {
+  @if $device == $phablet {
+    @media (min-width: $phablet) and (max-width: $tablet - 1) { @content; }
+  }
+  @else if $device == $tablet {
+    @media (min-width: $tablet) and (max-width: $desktop - 1) { @content; }
+  }
+  @else if $device == $desktop {
+    @media (min-width: $desktop) and (max-width: $high-definition - 1) { @content; }
+  }
+}
+
+
+// BREAKPOINT-BASED TYPOGRAPHY =========================================
+
+body {
+  @include type-settings;
+  
+  @include bp-min($phablet) {
+    @include type-settings-phablet;
+  }
+  
+  @include bp-min($tablet) {
+    @include type-settings-tablet;
+  }
+  
+  @include bp-min($desktop) {
+    @include type-settings-desktop;
+  }
+  
+  // @include bp-min($hi-def) {
+  //   @include type-settings-hi-def;
+  // }
+  
+}
+
+
+// RETINA SASS =========================================================
+
+// Original Sass variation of RetinaJS LESS method created by Nathan Crank.
+// <https://github.com/imulus/retinajs/tree/nathancrank-sass>
+
+// Updated by Pete Fairhurst
+// <http://twitter.com/markedup>
+
+@mixin retina-bg($path, $ext: "png", $w: "100%", $h: "auto") {
+  
+  $at1x_path: "#{$path}.#{$ext}";
+  $at2x_path: "#{$path}@2x.#{$ext}";
+  
+  background-image: url($at1x_path);
+  background-size: #{$w} #{$h};
+  
+  @media all and (-webkit-min-device-pixel-ratio : 1.5),
+         all and (-o-min-device-pixel-ratio: 3/2),
+         all and (min--moz-device-pixel-ratio: 1.5),
+         all and (min-device-pixel-ratio: 1.5) {
+           background-image: url($at2x_path);
+           background-size: #{$w} #{$h};
+  }
+  
+}
+
+
+// RESPONSIVE MEDIA SCALING & FRAMING ==================================
+
+// Original concept by Anders Andersen & Tobias Järlund for Aftonbladet.
+// <http://mobile.smashingmagazine.com/2013/09/16/responsive-images-performance-problem-case-study/>
+
+// Creates a container that scales to fill its parent, growing
+// vertically in a manner that always maintains the required ratio.
+
+.media-frame {
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 56.25%;// 16:9 ratio [default]
+  
+  &.ratio-four-three {
+    padding-bottom: 75%;// 4:3 ratio [override]
+  }
+  
+  &.ratio-square {
+    padding-bottom: 100%;// 1:1 ratio [e.g. Instagram]
+  }
+  
+  img, iframe, object, embed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  img {
+    height: auto;
+  }
+  
+  iframe, object, embed {
+    height: 100%;
+  }
+  
+}

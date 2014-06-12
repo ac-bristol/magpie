@@ -1,0 +1,47 @@
+// CORE FONT(S) ========================================================
+
+@mixin font-family-base {
+  font-family: Arial, sans-serif;
+}
+
+@mixin font-base {
+  @include font-family-base;
+} 
+
+.font-base {
+  @include font-base;
+}
+
+
+// CUSTOM FONT IMPORT(S) ===============================================
+
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro");
+
+@mixin font-family-brand {
+  font-family: "Source Sans Pro", Arial, sans-serif;
+}
+
+@mixin font-brand {
+  @include font-family-brand;
+  font-weight: normal !important;
+  text-transform: uppercase;
+}
+
+.font-brand {
+  @include font-brand;
+}
+
+
+// BASE FONT SETTINGS ==================================================
+
+html,
+button,
+input,
+select,
+textarea {
+  @include font-family-base;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+}

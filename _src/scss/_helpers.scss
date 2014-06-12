@@ -1,0 +1,7 @@
+@function em($wanted, $inherited) {
+  @return #{($wanted / $inherited) + 'em'};
+}
+
+@function pc($wanted, $parent) {
+  @return #{($wanted / $parent) * 100 + '%'};
+}

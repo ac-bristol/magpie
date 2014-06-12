@@ -1,0 +1,98 @@
+@import "compass";
+@import "helpers";
+@import "fonts";
+@import "responsive";
+@import "colors";
+@import "h5bp";
+@import "normalize";
+// @import "skeleton";
+
+
+// BASE TAG OVERRIDES ==================================================
+
+// Uncomment below to apply a more natural, predictable box model to all
+// elements if you wish - can make some Responsive calcs trickier tho!
+// http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+// 
+// *,
+// *:before,
+// *:after {
+//   -webkit-box-sizing: border-box;
+//      -moz-box-sizing: border-box;
+//           box-sizing: border-box;
+// }
+
+html,
+body {
+  background: $brand-bg;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  
+}
+
+p {
+  
+}
+
+
+// USEFUL GENERIC CLASSES ==============================================
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+
+// CORPUS ==============================================================
+
+.corpus {
+  
+}
+
+
+// SITE HEADER =========================================================
+
+.site-header {
+  
+}
+
+// Site logo -----------------------------------------------------------
+
+.site-logo {
+  
+  .logo {
+    
+  }
+  
+}
+
+
+// SITE FOOTER =========================================================
+
+.site-footer {
+  
+}
+
+
+////////////////////////////////////////////////////////////////////////
+// TEMPLATES • TEMPLATES • TEMPLATES • TEMPLATES • TEMPLATES • TEMPLATES 
+////////////////////////////////////////////////////////////////////////
+
+// TEMPLATE NAME =======================================================
+
+.tpl-template-name {
+  
+}
