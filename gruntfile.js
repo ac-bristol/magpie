@@ -46,6 +46,9 @@ module.exports = function(grunt) {
       concat: {
         options: {
             separator: ';',
+            stripBanners: true,
+            banner: '/*! <%= meta.projectName %> - ' +
+                    '<%= grunt.template.today("yyyy-mm-dd") %> */',
         },
         app: {
           src: [
@@ -71,7 +74,7 @@ module.exports = function(grunt) {
         },
         javascripts: {
           files: ['<%= meta.srcPath %>scripts/**/*.js'],
-          tasks: ['concat:dev']
+          tasks: ['concat']
         },
       }
  
@@ -87,6 +90,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['compass:dev']);
 
     // Build Task
-    grunt.registerTask('build', ['compass:build']);
+    grunt.registerTask('build', ['compass:build', 'concat']);
 
 };
