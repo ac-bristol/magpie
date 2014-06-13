@@ -22,7 +22,10 @@ module.exports = function(grunt) {
             options: {              
               sassDir: '<%= meta.srcPath %>scss',
               cssDir: '<%= meta.buildPath %>styles',
-              environment: 'development',
+              imagesDir: '<%= meta.buildPath %>images',
+              javascriptsDir: '<%= meta.buildPath %>scripts',    
+              fontsDir: '<%= meta.buildPath %>fonts',
+              outputStyle: 'expanded'
               sourcemap: true
             }
         },
@@ -30,8 +33,11 @@ module.exports = function(grunt) {
           options: {              
             sassDir: '<%= meta.srcPath %>scss',
             cssDir: '<%= meta.buildPath %>styles',
-            environment: 'production',
-            sourcemap: true
+            imagesDir: '<%= meta.buildPath %>images',
+            javascriptsDir: '<%= meta.buildPath %>scripts',    
+            fontsDir: '<%= meta.buildPath %>fonts',
+            outputStyle: 'compressed'
+            environment: 'production'
           }
         },
       },
