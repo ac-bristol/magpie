@@ -10,10 +10,13 @@ module.exports = function(grunt) {
       meta: {
         srcPath: '_src/',
         buildPath: 'assets/',
+        projectName: 'Project Name',
+        projectNameSpace: 'project-name',
       },
 
+      // Task configuration:
 
-      // Task configuration.
+      // Compass
       compass: {
         dev: {
             options: {              
@@ -33,28 +36,32 @@ module.exports = function(grunt) {
         },
       },
 
-     // uglify: {
-     //    options: {
-     //      mangle: false
-     //    },
-     //    my_target: {
-     //      files: {
-     //        '<%= meta.buildPath %>modernizr.js': '<%= meta.srcPath %>javascripts/modernizr.js'
-     //      }
-     //    }
-     //  },
+      // Concat
+      concat: {
+        options: {
+            separator: ';',
+        },
+        dev: {
+          src: [
+            '<%= meta.srcPath %>scripts/vendor/jquery.min.js',
+            '<%= meta.srcPath %>scripts/vendor/respond.min.js',
+            '<%= meta.srcPath %>scripts/application.min.js',
+          ],
+          dest: '<%= meta.buildPath %>/scripts/<%= meta.projectNameSpace %>.js',
+        },
+      },
 
-      
      
+     // Watch
       watch: {
         compass: {
           files: ['<%= meta.srcPath %>scss/**/*.scss'],
           tasks: ['compass:dev']
         },
-        // javascripts: {
-        //   files: ['<%= meta.srcPath %>assets/scripts/**/*.js'],
-        //   tasks: ['uglify']
-        // },
+        javascripts: {
+          files: ['<%= meta.srcPath %>scripts/**/*.js'],
+          tasks: ['concat:dev']
+        },
       }
  
     });
@@ -63,6 +70,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compass');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     // Default task.
     grunt.registerTask('default', ['compass:dev']);
