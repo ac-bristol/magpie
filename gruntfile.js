@@ -65,6 +65,17 @@ module.exports = function(grunt) {
         },
       },
 
+      imagemin: {
+        dynamic: {
+          files: [{
+            expand: true,
+            cwd: '<%= meta.buildPath %>images',
+            src: ['**/*.{png,jpg,gif}'],
+            dest: '<%= meta.buildPath %>images'
+          }]
+        }
+      },
+
      
      // Watch
       watch: {
@@ -85,11 +96,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
 
     // Default task.
     grunt.registerTask('default', ['compass:dev']);
 
     // Build Task
-    grunt.registerTask('build', ['compass:build', 'concat']);
+    grunt.registerTask('build', ['compass:build', 'concat', 'imagemin']);
 
 };
