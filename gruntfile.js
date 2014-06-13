@@ -25,7 +25,7 @@ module.exports = function(grunt) {
               imagesDir: '<%= meta.buildPath %>images',
               javascriptsDir: '<%= meta.buildPath %>scripts',    
               fontsDir: '<%= meta.buildPath %>fonts',
-              outputStyle: 'expanded'
+              outputStyle: 'expanded',
               sourcemap: true
             }
         },
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             imagesDir: '<%= meta.buildPath %>images',
             javascriptsDir: '<%= meta.buildPath %>scripts',    
             fontsDir: '<%= meta.buildPath %>fonts',
-            outputStyle: 'compressed'
+            outputStyle: 'compressed',
             environment: 'production'
           }
         },
@@ -47,13 +47,18 @@ module.exports = function(grunt) {
         options: {
             separator: ';',
         },
-        dev: {
+        app: {
           src: [
             '<%= meta.srcPath %>scripts/vendor/jquery.min.js',
             '<%= meta.srcPath %>scripts/vendor/respond.min.js',
             '<%= meta.srcPath %>scripts/application.min.js',
           ],
-          dest: '<%= meta.buildPath %>/scripts/<%= meta.projectNameSpace %>.js',
+          dest: '<%= meta.buildPath %>scripts/<%= meta.projectNameSpace %>.js',
+        },
+        single: {
+          files: {
+            '<%= meta.buildPath %>scripts/head.min.js': ['<%= meta.srcPath %>scripts/vendor/head.min.js'],
+          },
         },
       },
 
