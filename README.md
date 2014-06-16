@@ -19,6 +19,35 @@ Magpie is intended to be used as a **mobile-first** framework, progressively add
 
 **Having said that,** web design &amp; development is opinionated, personal, and often entirely bespoke. In this vein, Magpie has been built to be **flexible** and **non-prescriptive**, offering a raft of light, useful helpers, which aim to simplify some of the more repeatative and fiddly tasks you'll encounter during front-end production.
 
+## Useful Functions
+
+### Simple breakpoint handling
+
+Nest the functions `bp-min()`, `bp-max()` and `bp-only()` within your mobile-first Sass rules to quickly and easily create breakpoints for different device resolutions.
+
+As a quick example, the following simply changes the `background` rule for each named device width:
+
+	.myElement {
+		background: red;
+		
+		bp-min($tablet) {
+			background: green;
+		}
+		
+		bp-min($desktop) {
+			background: blue;
+		}
+		
+	}
+
+In a similar way, you can use `bp-max()` to prevent an element's layout from going beyond a certain breakpoint, while `bp-max()` lets you lock a set of rules to a specific breakpoint only.
+
+**But beware!** Whilst `bp-max()` and `bp-only()` are convenient, they should be used **sparingly** and only in circumstances where you simply can't achieve what you need scaling up from mobile-first styles using `bp-min()` (as shown above).
+
+If you're project is starting to make frequent use of both `bp-max()` and `bp-only()`, you're probably tackling your build in the wrong direction &ndash; i.e. not mobile-first &ndash; and increasing future pain and testing headaches across more and more devices.
+
+_You can find the **default Magpie breakpoints** inside the `./_src/_responsive.scss` Sass partial of your Magpie project. You can easily change these to suit your project, and even add your own!_
+
 ## Compiling your Magpie project
 
 Compass can continuously rebuild an in-development version of your Magpie project from the command line. Make sure you're in the `./_src` folder of your Magpie project, then run the following command:
