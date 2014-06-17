@@ -50,17 +50,11 @@ _You can find the **default Magpie breakpoints** inside the `./_src/_responsive.
 
 ## Compiling your Magpie project
 
-Compass can continuously rebuild an in-development version of your Magpie project from the command line. Make sure you're in the `./_src` folder of your Magpie project, then run the following command:
+Magpie uses [Grunt](http://headjs.com/) to run all the development and build tasks. To install run `npm install`. This will install all the dependencies listed in `package.json`.
 
-`compass watch`
+Whilst developing, run `grunt watch`. This will watch all the dev files, and run compass and js tasks every time you save a file. It has development settings in place such as source maps and expanded output for css.
 
-_You could also use an automated build tool, such as [Scout](http://mhs.github.io/scout-app/), to continuously rebuild your Magpie project. Just make sure you configure the tool to point to the `./_src` folder, too, because that's where the Compass build config lives._
-
-When you're ready to deploy your Magpie project to a production environment, use this command instead:
-
-`compass compile --environment=production --force`
-
-This will automatically concatenate all project style sheets into a single, minified CSS file for you, ready to upload!
+When you're ready to deploy your Magpie project to a production environment, use the command. `grunt build`. This includes settings for compressing JS and CSS, copying files to the right folders and minifying images etc.
 
 _Note that you **don't** need to upload your `./_src` folder—it's only needed during development._
 
@@ -73,6 +67,8 @@ At time of writing, sourcemaps are still an experimental part of Compass, and re
 `sudo gem uninstall compass`<br/>
 `sudo gem uninstall sass`<br/>
 `sudo gem install compass-sourcemaps --pre`
+
+There is also a Gemfile included if you have [Bundler](http://bundler.io/) installed. Running `bundle install` after un-installing will install the correct gems.
 
 **Windows**<br/>
 If the compass-sourcemaps package doesn't build during installation, try installing/updating `nmake` and re-running the `install ...` command.
