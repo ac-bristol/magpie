@@ -1,5 +1,18 @@
 module.exports = function(grunt) {
 
+  // JS files to be concatenated
+  var jsList = [
+    '<%= meta.srcPath %>scripts/vendor/jquery.min.js',
+    '<%= meta.srcPath %>scripts/vendor/respond.min.js',
+    '<%= meta.srcPath %>scripts/application.js'
+  ];
+
+  // Var for imagemin
+  var mozjpeg = require('imagemin-mozjpeg');
+
+  // Vars for Tasks
+  var autoprefixer = require('autoprefixer-core');
+
   // load all grunt tasks matching the `grunt-*` pattern
   require('load-grunt-tasks')(grunt);
  
@@ -19,55 +32,64 @@ module.exports = function(grunt) {
 
     // Task configuration:
 
-    // Compass
-    compass: {
+    // Sass: dev & build 
+    sass: {
       dev: {
-          options: {              
-            sassDir: '<%= meta.srcPath %>scss',
-            cssDir: '<%= meta.buildPath %>styles',
-            imagesDir: '<%= meta.buildPath %>images',
-            javascriptsDir: '<%= meta.buildPath %>scripts',    
-            fontsDir: '<%= meta.buildPath %>fonts',
-            outputStyle: 'expanded',
-            sourcemap: true
-          }
-      },
-      build: {
-        options: {              
-          sassDir: '<%= meta.srcPath %>scss',
-          cssDir: '<%= meta.buildPath %>styles',
-          imagesDir: '<%= meta.buildPath %>images',
-          javascriptsDir: '<%= meta.buildPath %>scripts',    
-          fontsDir: '<%= meta.buildPath %>fonts',
-          outputStyle: 'compressed',
-          environment: 'production'
+        options: {
+          style: 'expanded',
+          sourcemap: true
+        },
+        files: {                         
+          '<%= meta.buildPath %>styles/<%= meta.projectNameSpace %>.css': '<%= meta.srcPath %>scss/<%= meta.projectNameSpace %>.scss'
         }
       },
+      build: {
+        options: {
+          style: 'compressed'
+        },
+        files: {                         
+          '<%= meta.buildPath %>styles/<%= meta.projectNameSpace %>.css': '<%= meta.srcPath %>scss/<%= meta.projectNameSpace %>.scss'
+        }
+      }
     },
 
-    // Concat
+    // Concat: concatinates jsList
     concat: {
       options: {
-          separator: ';',
-          stripBanners: true,
-          banner: '/*! <%= meta.projectName %> - ' +
-                  '<%= grunt.template.today("yyyy-mm-dd") %> */',
+        separator: ' ',
+        stripBanners: true,
+        banner: '/*! <%= meta.projectName %> - <%= grunt.template.today("yyyy-mm-dd") %> */',
       },
-      app: {
-        src: [
-          '<%= meta.srcPath %>scripts/vendor/jquery.min.js',
-          '<%= meta.srcPath %>scripts/vendor/respond.min.js',
-          '<%= meta.srcPath %>scripts/application.min.js',
-        ],
-        dest: '<%= meta.buildPath %>scripts/<%= meta.projectNameSpace %>.js',
+      dev: {
+        src: [jsList],
+        dest: '<%= meta.buildPath %>scripts/application.js',
       },
-      single: {
-        files: {
-          '<%= meta.buildPath %>scripts/head.min.js': ['<%= meta.srcPath %>scripts/vendor/head.min.js'],
-        },
+      build: {
+        src: [jsList],
+        dest: '<%= meta.buildPath %>scripts/application.min.js',
+      }
+    },
+
+    // Copy: copies imgs,fonts,vids other to assets folder
+    copy: {
+      images: {
+        files: [
+          {expand: true, flatten: true, src: ['<%= meta.srcPath %>images/**',  '!<%= meta.srcPath %>images/**/*.psd'], dest: '<%= meta.buildPath %>images/', filter: 'isFile'}
+        ]
+      },
+      fonts: {
+        files: [
+          {expand: true, flatten: true, src: ['<%= meta.srcPath %>fonts/**'], dest: '<%= meta.buildPath %>fonts/', filter: 'isFile'}
+        ]
+      },
+      videos: {
+        files: [
+          {expand: true, flatten: true, src: ['<%= meta.srcPath %>videos/**'], dest: '<%= meta.buildPath %>videos/', filter: 'isFile'}
+        ]
       },
     },
 
+    // Imagemin: compresses images
     imagemin: {
       dynamic: {
         files: [{
@@ -79,25 +101,78 @@ module.exports = function(grunt) {
       }
     },
 
+    // SVG min
+    svgmin: { //minimize SVG files
+      options: {
+        plugins: [
+          { removeViewBox: false },
+          { removeUselessStrokeAndFill: false }
+        ]
+      },
+      dist: {
+        expand: true,
+        cwd: '<%= meta.buildPath %>images/',
+        src: ['*.svg'],
+        dest: '<%= meta.buildPath %>images/'
+      }
+    },
+
+    // Uglify 
+    uglify: {
+      options: {
+        mangle: false
+      },
+      my_target: {
+        files: {
+          '<%= meta.buildPath %>scripts/application.min.js': '<%= meta.buildPath %>scripts/application.min.js',
+        }
+      }
+    },
+
+    // CSS min
+    cssmin: {
+      minify: {
+        options: {
+        },
+        files: {
+          '<%= meta.buildPath %>styles/<%= meta.projectNameSpace %>.css': '<%= meta.buildPath %>styles/<%= meta.projectNameSpace %>.css'
+          }
+      }
+    },
    
-   // Watch
+    // Watch: watches styles, js and copy task
     watch: {
-      compass: {
+      sass: {
         files: ['<%= meta.srcPath %>scss/**/*.scss'],
-        tasks: ['compass:dev']
+        tasks: ['sass:dev']
       },
       javascripts: {
         files: ['<%= meta.srcPath %>scripts/**/*.js'],
         tasks: ['concat']
       },
-    }
+      images: {
+        files: ['<%= meta.srcPath %>images/**/*.jpg','<%= meta.srcPath %>/images/**/*.png','<%= meta.srcPath %>/images/**/*.gif','<%= meta.srcPath %>/images/**/*.svg'],
+        tasks: ['copy:images']
+      },
+      fonts: {
+        files: ['<%= meta.srcPath %>fonts/**/*.*'],
+        tasks: ['copy:fonts']
+      },
+      videos: {
+        files: ['<%= meta.srcPath %>videos/**/*.*'],
+        tasks: ['copy:videos']
+      },
+    },
+
+    // Clean
+    clean: ["<%= meta.buildPath %>"]
 
   });
 
   // Default task.
-  grunt.registerTask('default', ['compass:dev']);
+  grunt.registerTask('default', ['sass:dev', 'copy', 'concat:dev']);
 
   // Build Task
-  grunt.registerTask('build', ['compass:build', 'concat', 'imagemin']);
+  grunt.registerTask('build', ['clean', 'sass:build','copy', 'concat:build', 'imagemin', 'uglify', 'cssmin', 'svgmin']);
 
 };
